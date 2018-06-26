@@ -9,22 +9,22 @@ var classifier = new BrainJSClassifier();
 // classifier.addDocument('can you play some new music?', 'music');
 
 // saves classifier to filename
-saveClassifier = filename => {
-  classifier.save(filename, function(err, classifier) {});
+const saveClassifier = filename => {
+    classifier.save(filename, function(err, classifier) {});
 };
 
 // loads classifier from filename, then does callback
-loadClassifier = (filename, cb) => {
-  BrainJSClassifier.load(filename, null, null, cb);
+const loadClassifier = (filename, cb) => {
+    BrainJSClassifier.load(filename, null, null, cb);
 };
 
-loadedCB = (error, classifier) => {
-  console.log("loaded");
-  console.log(classifier.classify("did the tests pass?")); // -> software
-  console.log(classifier.classify("did you buy a new drive?")); // -> hardware
-  console.log(classifier.classify("What is the capacity?")); // -> hardware
-  console.log(classifier.classify("Lets meet tomorrow?")); // -> meeting
-  console.log(classifier.classify("Can you play some stuff?")); // -> music
+const loadedCB = (error, classifier) => {
+    console.log("loaded");
+    console.log(classifier.classify("did the tests pass?")); // -> software
+    console.log(classifier.classify("did you buy a new drive?")); // -> hardware
+    console.log(classifier.classify("What is the capacity?")); // -> hardware
+    console.log(classifier.classify("Lets meet tomorrow?")); // -> meeting
+    console.log(classifier.classify("Can you play some stuff?")); // -> music
 };
 
 // console.log("loaded");
@@ -44,19 +44,23 @@ loadedCB = (error, classifier) => {
 // })
 
 // take in an array of arrays of strings [['input','output'], ['input','output']]
-createNewClassifier = () => {
-  classifier.addDocument("my unit-tests failed.", "software");
-  classifier.addDocument("tried the program, but it was buggy.", "software");
-  classifier.addDocument("tomorrow we will do standup.", "meeting");
-  classifier.addDocument("the drive has a 2TB capacity.", "hardware");
-  classifier.addDocument("i need a new power supply.", "hardware");
-  classifier.addDocument("can you play some new music?", "music");
-  classifier.train();
-  saveClassifier("classifier.json");
+const createNewClassifier = () => {
+    classifier.addDocument("my unit-tests failed.", "software");
+    classifier.addDocument("tried the program, but it was buggy.", "software");
+    classifier.addDocument("tomorrow we will do standup.", "meeting");
+    classifier.addDocument("the drive has a 2TB capacity.", "hardware");
+    classifier.addDocument("i need a new power supply.", "hardware");
+    classifier.addDocument("can you play some new music?", "music");
+    classifier.train();
+    saveClassifier("classifier.json");
 };
 
 
 loadClassifier('classifier.json', loadedCB)
+
+const createEmptyJson = (name) => {
+    typeof name === 'string' ? fs.writeFileSync(`${name}.json`, "file contents") : console.log('create file failed')
+}
 
 // createNewClassifier()
 
