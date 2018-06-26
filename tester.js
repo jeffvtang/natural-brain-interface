@@ -39,7 +39,7 @@ const prepareDataSet = (dataSet) => {
     //console.log('in prepareDataSet');
     var parsedArray = fs.readFileSync(dataSet).toString().split("\n");;
     finalArray = [];
-    for (var i = 0; i < 200; i++) {
+    for (var i = 0; i < 300; i++) {
         let dataPoint = parsedArray[i];
         let match = dataPoint.match(/(.*)\s(0|1)$/)
         dataObject = {};
