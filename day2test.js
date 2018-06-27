@@ -47,6 +47,26 @@ const createNewClassifier = () => {
   // console.log("classifier saved");
 };
 
+const parseDatatoJSON = dataSet => {
+  console.log('in prepareDataSet');
+  var parsedArray = fs.readFileSync(dataSet).toString().split("\n");;
+  finalArray = [];
+  for (var i = 0; i < parsedArray.length - 1; i++) {
+      let dataPoint = parsedArray[i];
+      let match = dataPoint.match(/(.*)\s(0|1)$/)
+      dataObject = {};
+      dataObject.content = match[1];
+      match[2] == 1 ? dataObject.sentiment = 'positive' : dataObject.sentiment = 'negative';
+      match[2] == 1 ? dataObject.sentiment = '1' : dataObject.sentiment = '0';
+      finalArray.push(dataObject);
+  }
+  console.log(finalArray)
+}
+
+
+parseDatatoJSON('yelp.txt');
+
+
 // createEmptyJson('classifier')
 // createNewClassifier()
 // loadClassifier('classifier.json', loadedCB)
