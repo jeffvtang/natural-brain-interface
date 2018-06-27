@@ -1,5 +1,6 @@
 // var BrainJSClassifier = require("natural-brain");
 // var classifier = new BrainJSClassifier();
+var fs = require("fs");
 
 var natural = require("natural");
 // var classifier = new natural.BayesClassifier();
@@ -13,7 +14,7 @@ const createEmptyJson = name => {
 
 // saves classifier to filename
 const saveClassifier = (input, filename) => {
-  input.save(filename);
+  input.save(filename, function(err, classifier) {});
 };
 
 // save - promise version
@@ -42,7 +43,7 @@ const loadClassifier = (filename, cb) => {
 };
 
 const loadedCB = classifier => {
-// const loadedCB = (error, classifier) => {
+  // const loadedCB = (error, classifier) => {
   console.log("loaded database");
   // console.log(classifier)
   console.log(classifier.classify("did the tests pass?")); // -> software
@@ -58,7 +59,7 @@ const retrainClassifier = (error, classifier) => {
   classifier.addDocument("i love pie", "food");
   console.log("new feature added");
   classifier.retrain();
-  saveClassifier(classifier, 'classifier.json')
+  saveClassifier(classifier, "classifier.json");
 };
 
 // take in an array of arrays of strings [['input','output'], ['input','output']]
@@ -83,12 +84,37 @@ const createNewClassifier = () => {
 
 // createNewClassifier()
 // loadClassifier('classifier.json', loadedCB)
-loadClassifier('classifier.json', retrainClassifier)
+// loadClassifier('classifier.json', retrainClassifier)
 // loadClassifier('classifier.json', loadedCB)
-// loadClassifier('classifier.json', function(err, x) {
-//   console.log(x)
-// })
+// console.log(
+//   loadClassifier("classifier.json", function(err, x) {
+//     console.log(x); // returns the classifier from json
+//   })
+// );
+
+
+
 // loadedCB(x)
+
+// function sleep(ms) {
+//   return new Promise(resolve => setTimeout(resolve, ms));
+// }
+
+// var returnData;
+// async function demo() {
+// fs.readFile("classifier.json", "utf8", function(err, data) {
+//   if (!err) {
+//     returnData = JSON.parse(data);
+//   }
+//   // console.log(fileData)
+//   return returnData
+// }
+// );
+// await sleep(2000)
+// console.log(returnData)
+// }
+
+// demo()
 
 // const createNewClassifier = () => {
 //   return new Promise((resolve, reject) => {
