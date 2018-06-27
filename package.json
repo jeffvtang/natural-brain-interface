@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "natural": "^0.6.1",
-    "natural-brain": "^0.3.2"
+    "natural-brain": "^0.3.2",
+    "webworker-threads": "^0.7.15"
   }
 }

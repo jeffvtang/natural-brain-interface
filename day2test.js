@@ -2,12 +2,12 @@
 // var classifier = new BrainJSClassifier();
 
 var natural = require("natural");
-// var classifier = new natural.BayesClassifier();
-// var classifier = new natural.Classifier();
+var fs = require('fs')
+
 
 const createEmptyJson = name => {
   typeof name === "string"
-    ? fs.writeFileSync(`${name}.json`, "file contents")
+    ? fs.writeFileSync(`${name}.json`, "")
     : console.log("create file failed");
 };
 
@@ -25,6 +25,7 @@ const loadedCB = (error, classifier) => {
   console.log("loaded database");
   // console.log(classifier)
   console.log(classifier.classify("did the tests pass?")); // -> software
+  console.log(classifier.classify("i love pie")); // -> software or food if pass
 };
 
 const retrainClassifier = (error, classifier) => {
@@ -40,13 +41,14 @@ const createNewClassifier = () => {
   var classifier = new natural.BayesClassifier();
   classifier.addDocument("my unit-tests failed.", "software");
   // classifier.addDocument("pie is my greatest love", "food");
-  classifier.train();
+  classifier.train()
   // console.log("classifier trained");
   saveClassifier(classifier, "classifier.json");
   // console.log("classifier saved");
 };
 
+// createEmptyJson('classifier')
 // createNewClassifier()
 // loadClassifier('classifier.json', loadedCB)
-loadClassifier('classifier.json', retrainClassifier)
+// loadClassifier('classifier.json', retrainClassifier)
 // loadClassifier('classifier.json', loadedCB)
