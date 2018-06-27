@@ -61,6 +61,16 @@ const parseDatatoJSON = dataSet => {
       finalArray.push(dataObject);
   }
   console.log(finalArray)
+  loadClassifier('classifier.json', addDataSet(finalArray))
+}
+
+const addDataSet = (dataSet) => (error, classifier) => {
+
+  dataSet.forEach(function(item) {
+      classifier.addDocument(item.content, item.sentiment);
+  });
+  classifier.train();
+  saveClassifier(classifier, 'classifier.json');
 }
 
 
