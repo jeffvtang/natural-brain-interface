@@ -1,0 +1,1 @@
+{"classifier":{"classFeatures":{"1":{"0":2,"1":2,"2":2}},"classTotals":{"1":2},"totalExamples":2,"smoothing":1},"docs":[{"label":"1","text":["wow","love","place"]}],"features":{"wow":1,"love":1,"place":1},"stemmer":{},"lastAdded":1,"events":{"domain":null,"_events":{},"_eventsCount":0}}

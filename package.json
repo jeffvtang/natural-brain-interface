@@ -10,8 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "brain": "^1.0.0",
     "natural": "^0.6.1",
-    "natural-brain": "^0.3.2",
-    "webworker-threads": "^0.7.15"
+    "natural-brain": "^0.3.2"
   }
 }

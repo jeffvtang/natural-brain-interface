@@ -1,7 +1,7 @@
-// var BrainJSClassifier = require("natural-brain");
+var BrainJSClassifier = require("natural-brain");
 // var classifier = new BrainJSClassifier();
 
-var natural = require("natural");
+// var natural = require("natural");
 var fs = require("fs");
 
 const createEmptyJson = name => {
@@ -16,7 +16,7 @@ const saveClassifier = (input, filename) => {
 };
 
 const loadClassifier = (filename, cb) => {
-  natural.BayesClassifier.load(filename, null, cb);
+  BrainJSClassifier.load(filename, null, null, cb);
 };
 
 // const loadedCB = classifier => {
@@ -41,7 +41,7 @@ const retrainClassifier = (error, classifier) => {
 
 // take in an array of arrays of strings [['input','output'], ['input','output']]
 const createNewClassifier = () => {
-  var classifier = new natural.BayesClassifier();
+  var classifier = new BrainJSClassifier();
   classifier.addDocument("Wow... Loved this place.", "positive");
   // classifier.addDocument("pie is my greatest love", "food");
   classifier.train();
@@ -50,27 +50,37 @@ const createNewClassifier = () => {
   // console.log("classifier saved");
 };
 
+let stopWords = ['i', 'is', 'be', 'am', 'this', 'restaurant', 'are', 'was', 'will', 'were', 'than', 'that', 'then',
+    'there', 'ours', 'our', 'ought', 'other', 'or', 'only', 'once', 'on', 'off', 'myself', 'most', 'more', 'let', 'its',
+    'how', 'her', 'his', 'him', 'he', 'she', 'for', 'few', 'had', 'each', '.', 'being', 'could', 'should'
+];
+
+const removeStopWords = (content) => {
+  return content.split(' ').filter(word => stopWords.stops().indexOf(word.toLowerCase()) == -1).join(' ');
+}
+
 const addDataSet = (dataSet) => (error, classifier) => {
-  console.log(dataSet)
+  // console.log(dataSet)
   dataSet.forEach(function(item) {
     classifier.addDocument(item.content, item.sentiment);
   });
-  classifier.train()
+  classifier.retrain()
   saveClassifier(classifier, "classifier.json");
 };
 
 const parseDatatoJSON = dataSet => {
-  console.log("in prepareDataSet");
   var parsedArray = fs
     .readFileSync(dataSet)
     .toString()
     .split("\n");
   finalArray = [];
-  for (var i = 0; i < 100; i++) {
+  for (var i = 1; i < parsedArray.length - 1; i++) {
+  // for (var i = 0; i < parsedArray.length - 1; i++) {
     let dataPoint = parsedArray[i];
     let match = dataPoint.match(/(.*)\s(0|1)$/);
     dataObject = {};
-    dataObject.content = match[1];
+    content = match[1];
+    dataObject.content = removeStopWords(content);
     // match[2] == 1 ? dataObject.sentiment = 'positive' : dataObject.sentiment = 'negative';
     match[2] == 1
       ? (dataObject.sentiment = "positive")
@@ -81,9 +91,9 @@ const parseDatatoJSON = dataSet => {
   loadClassifier("classifier.json", addDataSet(finalArray));
 };
 
-// parseDatatoJSON("yelp.txt");
+parseDatatoJSON("yelp.txt");
 
-// createEmptyJson('classifier')
+  // createEmptyJson('classifier')
 // createNewClassifier()
 // loadClassifier('classifier.json', loadedCB)
 // loadClassifier('classifier.json', retrainClassifier)
