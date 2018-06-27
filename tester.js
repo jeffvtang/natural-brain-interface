@@ -2,6 +2,10 @@ var BrainJSClassifier = require("natural-brain");
 var classifier = new BrainJSClassifier();
 const fs = require('fs');
 
+let stopWords = ['i', 'is', 'be', 'am', 'this', 'restaurant', 'are', 'was', 'will', 'were', 'than', 'that', 'then',
+    'there', 'ours', 'our', 'ought', 'other', 'or', 'only', 'once', 'on', 'off', 'myself', 'most', 'more', 'let', 'its',
+    'how', 'her', 'his', 'him', 'he', 'she', 'for', 'few', 'had', 'each', '.', 'being', 'could', 'should'
+];
 const createEmptyJson = (name, content) => {
     typeof name === 'string' ? fs.writeFileSync(`${name}.json`, `${content}`) : console.log('create file failed')
 }
@@ -28,10 +32,21 @@ const testCB = (error, classifier) => {
     console.log("The candy was not bad\n", classifier.getClassifications("The food was not good not bad"));
 };
 
+const addSingleDocument = (content, sentiment) => {
+    console.log('in add single', content, sentiment);
+    content = removeStopWords(content);
+    dataObject = {};
+    dataObject.content = content;
+    dataObject.sentiment = sentiment;
+    addDataSet([dataObject]);
+
+
+
+}
 const prepareDataSet = (dataSet) => {
     var parsedArray = fs.readFileSync(dataSet).toString().split("\n");;
     finalArray = [];
-    for (var i = 0; i < 2; i++) {
+    for (var i = 0; i < 1; i++) {
         let dataPoint = parsedArray[i];
         let match = dataPoint.match(/(.*)\s(0|1)$/)
         dataObject = {};
@@ -39,7 +54,6 @@ const prepareDataSet = (dataSet) => {
         //match 1 has content and match 2 has sentiment
         let content = match[1];
         content = removeStopWords(content);
-        console.log('returned content', content);
         dataObject.content = content;
 
         match[2] == 1 ? dataObject.sentiment = 'positive' : dataObject.sentiment = 'negative';
@@ -49,24 +63,9 @@ const prepareDataSet = (dataSet) => {
 }
 
 const removeStopWords = (content) => {
-    let stopWords = ['i', 'is', 'be', 'am', 'this', 'restaurant', 'are', 'was', 'will', 'were'];
+
 
     return content.split(' ').filter(word => stopWords.indexOf(word.toLowerCase()) == -1).join(' ');
-
-    // content = content.split(' ');
-    // let stringToReturn = [];
-    // for (var i = 0; i < content.length; i++) {
-    //     if (stopWords.indexOf(content[i].toLowerCase()) != -1) {
-    //             !stopwords
-
-    //     } else {
-
-    //         stringToReturn.push(content[i]);
-    //     }
-    // }
-    // content = stringToReturn.join(' ');
-
-
 }
 
 function is_in_array(s, your_array) {
@@ -75,10 +74,6 @@ function is_in_array(s, your_array) {
     }
     return false;
 }
-
-
-
-
 
 const retrainClassifier = (error, classifier) => {
     console.log("retraining");
@@ -115,6 +110,10 @@ const start = (argv) => {
             break;
         case 'add':
             loadClassifier('classifier.json', retrainClassifier)
+            break;
+
+        case 'one':
+            loadClassifier('classifier.json', addSingleDocument(argv[3], argv[4]))
             break;
     }
 }
