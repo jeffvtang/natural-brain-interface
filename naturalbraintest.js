@@ -2,11 +2,17 @@ var BrainJSClassifier = require("natural-brain");
 var classifier = new BrainJSClassifier();
 const fs = require('fs');
 
+<<<<<<< HEAD
 const createEmptyJson = name => {
   typeof name === "string"
     ? fs.writeFileSync(`${name}.json`, "file contents")
     : console.log("create file failed");
 };
+=======
+const createEmptyJson = (name, content) => {
+    typeof name === 'string' ? fs.writeFileSync(`${name}.json`, `${content}`) : console.log('create file failed')
+}
+>>>>>>> 96befcefab3908a43048e34f7de3884b69a1e829
 
 // saves classifier to filename
 // const saveClassifier = filename => {
@@ -34,16 +40,12 @@ const saveClassifier = filename => {
 
 
 const loadedCB = (error, classifier) => {
-    console.log("loaded database");
-    console.log(classifier.classify("did the tests pass?")); // -> software
-    // console.log(classifier.classify("did you buy a new drive?")); // -> hardware
-    // console.log(classifier.classify("What is the capacity?")); // -> hardware
-    // console.log(classifier.classify("Lets meet tomorrow?")); // -> meeting
-    // console.log(classifier.classify("Can you play some stuff?")); // -> music
-    // console.log(classifier.classify("pie is the greatest")); // -> software if fail
-    return Promise.resolve('success');
-};
 
+    console.log(classifier.classify("Wow so good"));
+    console.log(classifier.classify("That was bad food"));
+
+};
+loadClassifier('classifier.json', loadedCB)
 const retrainClassifier = (error, classifier) => {
     console.log("retraining");
     classifier.addDocument("i love pie", "food");
@@ -62,19 +64,19 @@ const createNewClassifier = () => {
         // classifier.addDocument("i need a new power supply.", "hardware");
         // classifier.addDocument("can you play some new music?", "music");
         classifier.train();
-        console.log('classifier trained')
+        // console.log('classifier trained')
         saveClassifier("classifier.json");
-        console.log('classifier saved')
+        //console.log('classifier saved')
         resolve()
     })
 };
 
 
 const prepareDataSet = (dataSet) => {
-    console.log('in prepareDataSet');
+    //console.log('in prepareDataSet');
     var parsedArray = fs.readFileSync(dataSet).toString().split("\n");;
     finalArray = [];
-    for (var i = 0; i < parsedArray.length - 1; i++) {
+    for (var i = 0; i < 20; i++) {
         let dataPoint = parsedArray[i];
         let match = dataPoint.match(/(.*)\s(0|1)$/)
         dataObject = {};
@@ -82,33 +84,46 @@ const prepareDataSet = (dataSet) => {
         match[2] == 1 ? dataObject.sentiment = 'positive' : dataObject.sentiment = 'negative';
         finalArray.push(dataObject);
     }
-    console.log(finalArray)
-
+    //console.log(finalArray);
+    addDataSet(finalArray);
 }
-const createEmptyJson = (name) => {
-    typeof name === 'string' ? fs.writeFileSync(`${name}.json`, "file contents") : console.log('create file failed')
-}
+const addDataSet = (dataSet) => {
 
-prepareDataSet('yelp.txt');
-const createNewClassifier = async() => {
-    classifier.addDocument("my unit-tests failed.", "software");
-    // classifier.addDocument("tried the program, but it was buggy.", "software");
-    // classifier.addDocument("tomorrow we will do standup.", "meeting");
-    // classifier.addDocument("the drive has a 2TB capacity.", "hardware");
-    // classifier.addDocument("i need a new power supply.", "hardware");
-    // classifier.addDocument("can you play some new music?", "music");
+    dataSet.forEach(function(item) {
+        classifier.addDocument(item.content, item.sentiment);
+    });
     classifier.train();
-    console.log('classifier trained')
-    saveClassifier("classifier.json");
-    console.log('classifier saved')
-    return
-};
+    saveClassifier('classifier.json');
+    // console.log(dataSet[0])
+
+}
+
+
+
+
+//prepareDataSet('yelp.txt');
+
+
+// const createNewClassifier = async() => {
+//     classifier.addDocument("my unit-tests failed.", "software");
+//     // classifier.addDocument("tried the program, but it was buggy.", "software");
+//     // classifier.addDocument("tomorrow we will do standup.", "meeting");
+//     // classifier.addDocument("the drive has a 2TB capacity.", "hardware");
+//     // classifier.addDocument("i need a new power supply.", "hardware");
+//     // classifier.addDocument("can you play some new music?", "music");
+//     classifier.train();
+//     console.log('classifier trained')
+//     saveClassifier("classifier.json");
+//     console.log('classifier saved')
+//     return
+// };
 
 /* promise vs async/await
 const foo = () => {
     createNewClassifier().then(loadCB)
 }
 
+<<<<<<< HEAD
 const foo = async() => {
     await createNewClassifier()
     loadCB
@@ -136,6 +151,20 @@ createNewClassifier().then(loadClassifier("classifier.json")).then(r => {console
 //   resolve('success')
 //   //   // saveClassifier("classifier.json");
 // })
+=======
+// const foo = async() => {
+//     await createNewClassifier()
+//     loadCB
+// }
+
+
+createNewClassifier()
+    .then(r => { loadClassifier('classifier.json', loadedCB) })
+
+
+// .then(r => {loadClassifier('classifier.json', retrainClassifier)})
+// .then(r => {loadClassifier('classifier.json', loadedCB)})
+>>>>>>> 96befcefab3908a43048e34f7de3884b69a1e829
 
 // createWhole
 // .then(saveClassifier('classifier.json'))
